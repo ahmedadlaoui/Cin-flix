@@ -1,57 +1,117 @@
-var counter = 1;
+//================================================slider========================================================
+let counterr = 1;
 
 function NextSlide() {
-    counter++;
-    if (counter === 4) {
-        counter = 1;
+    counterr++;
+    if (counterr === 4) {
+        counterr = 1;
     }
-    document.getElementById('radio' + counter).checked = true;
+    document.getElementById('radio' + counterr).checked = true;
 }
 function PreviousSlide() {
-    counter--;
-    if (counter === 0) {
-        counter = 3;
+    counterr--;
+    if (counterr === 0) {
+        counterr = 3;
     }
-    document.getElementById('radio' + counter).checked = true;
+    document.getElementById('radio' + counterr).checked = true;
 }
+
 let right = true;
 
-/*setInterval(function () {
+setInterval(function () {
     if (right) {
-        counter++;
-        if (counter >= 3) {
-            counter = 3;
+        counterr++;
+        if (counterr >= 3) {
+            counterr = 3;
             right = false;
         }
     }
     else {
-        counter--;
-        if (counter <= 1) {
-            counter = 1;
+        counterr--;
+        if (counterr <= 1) {
+            counterr = 1;
             right = true;
         }
     }
-    document.getElementById('radio' + counter).checked = true;
+    document.getElementById('radio' + counterr).checked = true;
 
-}, 3000);*/
+}, 3000);
 
+//=========================================clear-films==================================================================
+let films = document.querySelectorAll('.film')
+let posters = document.querySelectorAll('.poster')
+let hearts = document.querySelectorAll('.heart')
 
-/*search bar*/
+function clearFilmsList() {
+    const filmsList = document.getElementById('films-list');
+    filmsList.innerHTML = '';
+    for (i = 0; i < hearts.length; i++) {
+        if (hearts[i].style.fill === "red") {
+            const addedfilm = document.createElement('div');
+            addedfilm.className = "film"
+
+            const image = posters[i].cloneNode(true)
+            addedfilm.appendChild(image);
+            filmsList.appendChild(addedfilm);
+        }
+    }
+}
+// function loadfilms() {
+//     for (i = 0; i < films.length; i++) {
+//         const mm = localStorage.getItem('fav' + i)
+//         document.getElementById('films-list').appendChild(mm);
+//     }
+// }
+// window.onload = loadfilms()
+
+// document.getElementById('films-list').appendChild(addedfilm);
+//=======================================================add-to-favorite================================================
+
+function press(number) {
+    const heartt = document.getElementById('heart' + number);
+
+    if (heartt.style.fill === "black") {
+        heartt.style.fill = "red"
+        localStorage.setItem('heartColor' + (number - 1), "red");
+    }
+    else {
+        heartt.style.fill = "black"
+        localStorage.setItem('heartColor' + (number - 1), "black");
+    }
+
+}
+function loadHeartColors() {
+    hearts.forEach((heart, index) => {
+        const color = localStorage.getItem('heartColor' + index);
+        heart.style.fill = color;
+    });
+}
+window.onload = loadHeartColors()
+
+hearts.forEach((heart, index) => {
+    heart.addEventListener('click', (e) => {
+        press(index + 1)
+        clearFilmsList();
+    });
+});
+
+//====================================================search==================================================
 
 function search() {
     let inputvalue = document.getElementById('search').value.toUpperCase();
-    let Poster = document.querySelectorAll('.film');
+    let img = document.querySelectorAll('.film');
     let title = document.getElementsByTagName('h6');
 
     for (i = 0; i < title.length; i++) {
-        if (title[i].innerHTML.toUpperCase().indexOf(inputvalue) >= 0) {
-            Poster[i].style.display = "";
+        if (title[i].textContent.toUpperCase().indexOf(inputvalue) >= 0) {
+            img[i].style.display = "";
         } else {
-            Poster[i].style.display = "none";
+            img[i].style.display = "none";
         }
     }
 
 }
+//==============================================likes-&-dislikes=====================================================
 
 let like = document.querySelector('.like');
 let likecounter = document.getElementById('likecounter');
@@ -60,47 +120,47 @@ let dislikecounter = document.getElementById('dislikecounter');
 let dislikes = parseInt(dislikecounter.textContent);
 let dislike = document.querySelector('.dislike');
 
-like.style.fill = "black"
-dislike.style.fill = "black"
+let var1 = "black";
 
-//likes 
+like.style.fill = var1
+dislike.style.fill = var1
 
 like.addEventListener("click", (e) => {
     if (dislike.style.fill === "red") {
-        dislike.style.fill = "black"
+        dislike.style.fill = var1
         dislikes--;
         dislikecounter.textContent = dislikes;
     }
 
-    if (like.style.fill === "black") {
+    if (like.style.fill === var1) {
         likes++;
         likecounter.textContent = likes;
         like.style.fill = "green";
     } else if (like.style.fill === "green") {
-        like.style.fill = "black";
+        like.style.fill = var1;
         likes--;
         likecounter.textContent = likes;
     }
 })
 dislike.addEventListener("click", (e) => {
     if (like.style.fill === "green") {
-        like.style.fill = "black"
+        like.style.fill = var1
         likes--;
         likecounter.textContent = likes;
     }
 
-    if (dislike.style.fill === "black") {
+    if (dislike.style.fill === var1) {
         dislikes++;
         dislikecounter.textContent = dislikes;
         dislike.style.fill = "red";
     } else if (dislike.style.fill === "red") {
-        dislike.style.fill = "black";
+        dislike.style.fill = var1;
         dislikes--;
         dislikecounter.textContent = dislikes;
     }
 
 })
-
+//==============================================rating-stars========================================================
 let starscounter;
 
 function count2() {
@@ -116,72 +176,84 @@ function count5() {
     starscounter = 5;
 }
 
-// let star1 = document.getElementById('nejma1');
-// let star2 = document.getElementById('nejma2');
-// let star3 = document.getElementById('nejma3');
-// let star4 = document.getElementById('nejma4');
-// let star5 = document.getElementById('nejma5');
-// const stars = [star1, star2, star3, star4, star5];
-
-// function clearstars() {
-//     star1.style.fill = "none"
-//     star2.style.fill = "none"
-//     star3.style.fill = "none"
-//     star4.style.fill = "none"
-//     star5.style.fill = "none"
-// }
 let stars = document.querySelectorAll('.nejma');
-function clearstars(){
+function clearstars() {
     stars.forEach(star => {
-        star.style.fill="none"
+        star.style.fill = "none"
     });
 }
+let couleur = "#FFCB45";
 
+stars[0].addEventListener('click', (e) => {
+    console.log(stars[0]);
+
+    if (couleur.includes(stars[0].style.fill)) {
+        stars[0].style.fill = "none"
+    }
+})
 function setStars(number) {
     clearstars();
     for (let i = 0; i < number; i++) {
-        stars[i].style.fill = "gold";
+        stars[i].style.fill = "#FFCB45";
     }
 }
 
 stars.forEach((star, index) => {
     star.addEventListener("click", (e) => {
-        setStars(index + 1);
-        console.log(index + 1)
+        setStars(index + 1)
     });
 });
 
-// star1.addEventListener("click", (e) => {
-//     clearstars();
-//     star1.style.fill = "gold"
-// })
+//==========================================darkmode==============================================================
 
-// star2.addEventListener("click", (e) => {
-//     clearstars();
-//     star1.style.fill = "gold"
-//     star2.style.fill = "gold"
-// })
-// star3.addEventListener("click", (e) => {
-//     clearstars();
-//     star1.style.fill = "gold"
-//     star2.style.fill = "gold"
-//     star3.style.fill = "gold"
-// })
-// star4.addEventListener("click", (e) => {
-//     clearstars();
-//     star1.style.fill = "gold"
-//     star2.style.fill = "gold"
-//     star3.style.fill = "gold"
-//     star4.style.fill = "gold"
-// })
-// star5.addEventListener("click", (e) => {
-//     clearstars();
-//     star1.style.fill = "gold"
-//     star2.style.fill = "gold"
-//     star3.style.fill = "gold"
-//     star4.style.fill = "gold"
-//     star5.style.fill = "gold"
-// })
+const body = document.getElementById('bdy');
+function switchmode() {
+    if (body.className === "defaultmode") {
+        localStorage.setItem('mode', "darkmode");
+        body.className = "darkmode";
+    } else {
+        localStorage.setItem('mode', "defaultmode");
+        body.className = "defaultmode";
+    }
+}
+function loadmode() {
+    const savedMode = localStorage.getItem('mode');
+    body.className = savedMode;
+}
+window.onload = loadmode();
+
+//===============================================hamburger-menu========================================================
+
+function displaymenu() {
+    if (document.querySelector('.bar').style.display === "none") {
+        document.querySelector('.bar').style.display = "flex"
+    } else {
+        document.querySelector('.bar').style.display = "none"
+    }
+
+}
+//======================================add-review================================================================
+
+document.getElementById('sumbit-button').addEventListener('click', (e) => {
+    if (document.getElementById('textearea').value != '') {
+        const newcomment = document.createElement('div');
+        newcomment.className = "prototype";
+        document.getElementById('displaycomments').appendChild(newcomment);
+
+        const person = document.createElement('h4');
+        person.className = "comintir";
+        person.textContent = "You";
+        newcomment.appendChild(person);
+
+        const paragraph = document.createElement('p')
+        paragraph.textContent = document.getElementById('textearea').value;;
+        newcomment.appendChild(paragraph);
+
+        document.getElementById('textearea').value = '';
+        clearstars();
+    }
+})
+
 
 
 
